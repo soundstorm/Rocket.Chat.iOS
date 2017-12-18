@@ -52,7 +52,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="open.rocket.chat" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uJm-FR-DgP">
-                                        <rect key="frame" x="8" y="15" width="102.5" height="21"/>
+                                        <rect key="frame" x="16" y="15" width="102.5" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="PtB-OQ-VSJ"/>
                                         </constraints>
@@ -72,7 +72,7 @@
                                     <constraint firstItem="uJm-FR-DgP" firstAttribute="centerY" secondItem="4z5-1s-8ej" secondAttribute="centerY" id="1hm-6I-Njm"/>
                                     <constraint firstItem="l08-6G-CAI" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="uJm-FR-DgP" secondAttribute="trailing" constant="8" id="1nF-yc-a4m"/>
                                     <constraint firstItem="l08-6G-CAI" firstAttribute="top" secondItem="4z5-1s-8ej" secondAttribute="top" id="RxP-rt-aMZ"/>
-                                    <constraint firstItem="uJm-FR-DgP" firstAttribute="leading" secondItem="4z5-1s-8ej" secondAttribute="leading" constant="8" id="eYz-eI-NZd"/>
+                                    <constraint firstItem="uJm-FR-DgP" firstAttribute="leading" secondItem="4z5-1s-8ej" secondAttribute="leading" constant="16" id="eYz-eI-NZd"/>
                                     <constraint firstAttribute="bottom" secondItem="l08-6G-CAI" secondAttribute="bottom" id="iSa-jZ-HkE"/>
                                     <constraint firstAttribute="trailing" secondItem="l08-6G-CAI" secondAttribute="trailing" constant="8" id="imU-if-8aZ"/>
                                     <constraint firstAttribute="height" constant="50" id="pkj-PP-zxI"/>
