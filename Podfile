@@ -5,13 +5,18 @@ use_frameworks!
 inhibit_all_warnings!
 
 def shared_pods
-  # Crash Report
-  pod 'Fabric'
-  pod 'Crashlytics'
+  # Database
+  pod 'RealmSwift'
 
   # Code utilities
   pod 'SwiftyJSON'
   pod 'semver', :git => 'https://github.com/rafaelks/Semver.Swift.git', :branch => 'chore/swift4'
+end
+
+def app_pods
+  # Crash Report
+  pod 'Fabric'
+  pod 'Crashlytics'
 
   # UI
   pod 'SideMenuController', :git => 'https://github.com/rafaelks/SideMenuController.git'
@@ -23,9 +28,6 @@ def shared_pods
 
   # Text Processing
   pod 'RCMarkdownParser', :git => 'https://github.com/RocketChat/RCMarkdownParser.git'
-
-  # Database
-  pod 'RealmSwift'
 
   # Network
   pod 'SDWebImage', '~> 4'
@@ -40,12 +42,15 @@ def shared_pods
 end
 
 target 'Rocket.Chat' do
-  # Shared pods
+  app_pods
+  shared_pods
+end
+
+target 'Rocket.Chat.ShareExtension' do
   shared_pods
 end
 
 target 'Rocket.ChatTests' do
-  # Shared pods
   shared_pods
 end
 
