@@ -7,3 +7,11 @@
 //
 
 import Foundation
+
+extension UserDefaults {
+
+    static var sharedContainer: UserDefaults? {
+        return UserDefaults(suiteName: kBundleSharedGroup)
+    }
+
+}

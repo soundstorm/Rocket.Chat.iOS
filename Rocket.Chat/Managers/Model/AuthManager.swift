@@ -88,13 +88,25 @@ struct AuthManager {
             return
         }
 
-        let defaults = UserDefaults.standard
+        let defaultsStandard = UserDefaults.standard
 
         guard
-            let token = defaults.string(forKey: ServerPersistKeys.token),
-            let serverURL = defaults.string(forKey: ServerPersistKeys.serverURL),
-            let userId = defaults.string(forKey: ServerPersistKeys.userId) else {
-                return
+            let token = defaultsStandard.string(forKey: ServerPersistKeys.token),
+            let serverURL = defaultsStandard.string(forKey: ServerPersistKeys.serverURL),
+            let userId = defaultsStandard.string(forKey: ServerPersistKeys.userId)
+        else {
+            return
+        }
+
+        guard let defaultsShared = UserDefaults.sharedContainer else {
+            fatalError("sharedContainer must exists.")
+        }
+
+        // If servers already exists in standard UserDefaults, move it to shared and
+        // remove it from standard.
+        if let servers = defaultsStandard.array(forKey: ServerPersistKeys.servers) {
+            defaultsShared.set(servers, forKey: ServerPersistKeys.servers)
+            return
         }
 
         let servers = [[
@@ -104,11 +116,11 @@ struct AuthManager {
             ServerPersistKeys.userId: userId
         ]]
 
-        defaults.set(0, forKey: ServerPersistKeys.selectedIndex)
-        defaults.set(servers, forKey: ServerPersistKeys.servers)
-        defaults.removeObject(forKey: ServerPersistKeys.token)
-        defaults.removeObject(forKey: ServerPersistKeys.serverURL)
-        defaults.removeObject(forKey: ServerPersistKeys.userId)
+        defaultsShared.set(0, forKey: ServerPersistKeys.selectedIndex)
+        defaultsShared.set(servers, forKey: ServerPersistKeys.servers)
+        defaultsStandard.removeObject(forKey: ServerPersistKeys.token)
+        defaultsStandard.removeObject(forKey: ServerPersistKeys.serverURL)
+        defaultsStandard.removeObject(forKey: ServerPersistKeys.userId)
     }
 
     /**

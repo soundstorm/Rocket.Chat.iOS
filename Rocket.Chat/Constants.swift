@@ -7,3 +7,5 @@
 //
 
 import Foundation
+
+let kBundleSharedGroup = "group.ios.chat.rocket"
