@@ -12,6 +12,7 @@
 		14FBFF771FB267BF000D400B /* MentionsTextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FBFF761FB267BF000D400B /* MentionsTextFieldTableViewCell.swift */; };
 		14FBFF791FB267C9000D400B /* MentionsTextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14FBFF781FB267C9000D400B /* MentionsTextFieldTableViewCell.xib */; };
 		15A2FD223558011BFDE03883 /* Pods_Rocket_ChatTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68D870A8D54F5431A14607AE /* Pods_Rocket_ChatTests.framework */; };
+		3596BC17201681EF00B4BE5A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3596BC11201681ED00B4BE5A /* InfoPlist.strings */; };
 		4101BF011F8D0A1700F67E89 /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4101BF001F8D0A1700F67E89 /* AppManager.swift */; };
 		4101BF031F8D11FB00F67E89 /* AppManagerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4101BF021F8D11FB00F67E89 /* AppManagerSpec.swift */; };
 		4102E3AA1E532323004BAA82 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4102E3A91E532323004BAA82 /* Settings.storyboard */; };
@@ -360,6 +361,11 @@
 		1499781C1FA605CE007E013D /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		14FBFF761FB267BF000D400B /* MentionsTextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MentionsTextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		14FBFF781FB267C9000D400B /* MentionsTextFieldTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MentionsTextFieldTableViewCell.xib; sourceTree = "<group>"; };
+		3596BC12201681ED00B4BE5A /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3596BC13201681EE00B4BE5A /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3596BC14201681EE00B4BE5A /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3596BC15201681EE00B4BE5A /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3596BC16201681EE00B4BE5A /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		35AE3FC690B1D3DC4E9DE715 /* Pods-Rocket.ChatTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Rocket.ChatTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Rocket.ChatTests/Pods-Rocket.ChatTests.release.xcconfig"; sourceTree = "<group>"; };
 		35D2F140200A45E800B4BE5A /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4101BF001F8D0A1700F67E89 /* AppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppManager.swift; path = Managers/AppManager.swift; sourceTree = "<group>"; };
@@ -1279,6 +1285,7 @@
 				4174CB201D2DD4690086DAC8 /* Rocket.Chat-Bridge.h */,
 				41DF76E91D2C50710028DBF8 /* Assets.xcassets */,
 				41DF76EE1D2C50720028DBF8 /* Info.plist */,
+				3596BC11201681ED00B4BE5A /* InfoPlist.strings */,
 				41833F4D1DEF16B600E54655 /* Keys.plist */,
 				41EB22381E5F056600AA3AE7 /* Localizable.strings */,
 				80307E431FD75DC0006AD9EF /* VoiceOver.strings */,
@@ -1925,6 +1932,7 @@
 				41DF76EA1D2C50710028DBF8 /* Assets.xcassets in Resources */,
 				809B53141FE3294400833DD2 /* ReactionListView.xib in Resources */,
 				41865AF41FC8B25100A5E48F /* WebViewControllerEmbedded.xib in Resources */,
+				3596BC17201681EF00B4BE5A /* InfoPlist.strings in Resources */,
 				411F7D961F5179B50080E8AD /* ChatChannelHeaderCell.xib in Resources */,
 				41DCB8261DDC828200E1197F /* SubscriptionSearchMoreView.xib in Resources */,
 				4102E3AA1E532323004BAA82 /* Settings.storyboard in Resources */,
@@ -2594,6 +2602,18 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		3596BC11201681ED00B4BE5A /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3596BC12201681ED00B4BE5A /* fr */,
+				3596BC13201681EE00B4BE5A /* pl */,
+				3596BC14201681EE00B4BE5A /* cs */,
+				3596BC15201681EE00B4BE5A /* de */,
+				3596BC16201681EE00B4BE5A /* pt-BR */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		41DF76EB1D2C50720028DBF8 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

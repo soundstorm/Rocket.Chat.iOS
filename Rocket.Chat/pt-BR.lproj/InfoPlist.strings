@@ -1,0 +1,5 @@
+// Authorization
+"NSCameraUsageDescription" = "Tirar fotos e gravar vídeos";
+"NSMicrophoneUsageDescription" = "Gravar e enviar áudios e vídeos";
+"NSPhotoLibraryUsageDescription" = "Para enviar fotos de sua biblioteca";
+"NSPhotoLibraryAddUsageDescription" = "Para salvar imagens em sua biblioteca";

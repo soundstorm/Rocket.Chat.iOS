@@ -1,0 +1,5 @@
+// Authorization
+"NSCameraUsageDescription" = "Fotografování a nahrávání videí";
+"NSMicrophoneUsageDescription" = "Nahrávání a nahrávání zvuku a videa";
+"NSPhotoLibraryUsageDescription" = "Chcete-li nahrávat fotografie z knihovny";
+"NSPhotoLibraryAddUsageDescription" = "Uložení obrázků do knihovny";
