@@ -291,6 +291,11 @@ final class ChatViewController: SLKTextViewController {
         ), forCellWithReuseIdentifier: ChatMessageDaySeparator.identifier)
 
         collectionView?.register(UINib(
+            nibName: "ChatMessageUnreadIndicator",
+            bundle: Bundle.main
+        ), forCellWithReuseIdentifier: ChatMessageUnreadIndicator.identifier)
+
+        collectionView?.register(UINib(
             nibName: "ChatChannelHeaderCell",
             bundle: Bundle.main
         ), forCellWithReuseIdentifier: ChatChannelHeaderCell.identifier)
@@ -859,6 +864,18 @@ extension ChatViewController {
         return cell
     }
 
+    func cellForUnreadIndicator(_ obj: ChatData, at indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView?.dequeueReusableCell(
+            withReuseIdentifier: ChatMessageUnreadIndicator.identifier,
+            for: indexPath
+        ) as? ChatMessageDaySeparator else {
+            return UICollectionViewCell()
+        }
+
+        cell.labelTitle.text = "unread messages" //TODO translate
+        return cell
+    }
+
     func cellForChannelHeader(_ obj: ChatData, at indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView?.dequeueReusableCell(
             withReuseIdentifier: ChatChannelHeaderCell.identifier,
@@ -933,6 +950,10 @@ extension ChatViewController: UICollectionViewDelegateFlowLayout {
 
             if obj.type == .daySeparator {
                 return CGSize(width: fullWidth, height: ChatMessageDaySeparator.minimumHeight)
+            }
+
+            if obj.type == .unreadIndicator {
+                return CGSize(width: fullWidth, height: ChatMessageUnreadIndicator.minimumHeight)
             }
 
             if let message = obj.message {

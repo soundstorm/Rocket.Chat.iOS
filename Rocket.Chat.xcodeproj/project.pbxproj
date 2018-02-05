@@ -12,6 +12,7 @@
 		14FBFF771FB267BF000D400B /* MentionsTextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FBFF761FB267BF000D400B /* MentionsTextFieldTableViewCell.swift */; };
 		14FBFF791FB267C9000D400B /* MentionsTextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14FBFF781FB267C9000D400B /* MentionsTextFieldTableViewCell.xib */; };
 		15A2FD223558011BFDE03883 /* Pods_Rocket_ChatTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68D870A8D54F5431A14607AE /* Pods_Rocket_ChatTests.framework */; };
+		355D598C2028A21C00B4BE5A /* ChatMessageUnreadIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 355D598B2028A21C00B4BE5A /* ChatMessageUnreadIndicator.swift */; };
 		35BCD301201A57EA00B4BE5A /* Ask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35BCD300201A57EA00B4BE5A /* Ask.swift */; };
 		35BCD303201A9FB800B4BE5A /* AskSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35BCD302201A9FB800B4BE5A /* AskSpec.swift */; };
 		4101BF011F8D0A1700F67E89 /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4101BF001F8D0A1700F67E89 /* AppManager.swift */; };
@@ -364,6 +365,8 @@
 		1499781C1FA605CE007E013D /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		14FBFF761FB267BF000D400B /* MentionsTextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MentionsTextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		14FBFF781FB267C9000D400B /* MentionsTextFieldTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MentionsTextFieldTableViewCell.xib; sourceTree = "<group>"; };
+		355D598A2028A04B00B4BE5A /* ChatMessageUnreadIndicator.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatMessageUnreadIndicator.xib; sourceTree = "<group>"; };
+		355D598B2028A21C00B4BE5A /* ChatMessageUnreadIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageUnreadIndicator.swift; sourceTree = "<group>"; };
 		35AE3FC690B1D3DC4E9DE715 /* Pods-Rocket.ChatTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Rocket.ChatTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Rocket.ChatTests/Pods-Rocket.ChatTests.release.xcconfig"; sourceTree = "<group>"; };
 		35BCD300201A57EA00B4BE5A /* Ask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ask.swift; sourceTree = "<group>"; };
 		35BCD302201A9FB800B4BE5A /* AskSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskSpec.swift; sourceTree = "<group>"; };
@@ -886,6 +889,8 @@
 				412BCC841E55C6A300F7F4EE /* ChatMessageTextView.xib */,
 				41D3A62F1E0805490011949D /* ChatMessageDaySeparator.swift */,
 				41D3A62D1E0805310011949D /* ChatMessageDaySeparator.xib */,
+				355D598A2028A04B00B4BE5A /* ChatMessageUnreadIndicator.xib */,
+				355D598B2028A21C00B4BE5A /* ChatMessageUnreadIndicator.swift */,
 				41AC3CD81DCCA0C9002DC39A /* AutocompleteCell.swift */,
 				41AC3CD21DCC9873002DC39A /* AutocompleteCell.xib */,
 				41D894011F4EF64200E284D2 /* ChatDirectMessageHeaderCell.swift */,
@@ -2331,6 +2336,7 @@
 				D32E28261DFD86C300D6019C /* PersistencyCoordinator.swift in Sources */,
 				D10E9C221F643616007F1796 /* MentionModelMapping.swift in Sources */,
 				419205491D52EDE6004EEC5F /* UILabelExtension.swift in Sources */,
+				355D598C2028A21C00B4BE5A /* ChatMessageUnreadIndicator.swift in Sources */,
 				4162E1551D654A7400AAAE49 /* SocketHandlers.swift in Sources */,
 				4174CB151D2D99A30086DAC8 /* BaseNavigationController.swift in Sources */,
 				419ECCA61F3CA58A005F224B /* ChatControllerDocuments.swift in Sources */,

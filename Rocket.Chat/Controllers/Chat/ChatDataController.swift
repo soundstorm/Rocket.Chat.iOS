@@ -10,6 +10,7 @@ import Foundation
 
 enum ChatDataType {
     case daySeparator
+    case unreadIndicator
     case message
     case loader
     case header
