@@ -60,8 +60,6 @@ final class ServersListView: UIView {
         }
     }
 
-    var presentAddServer: (() -> Void)?
-
     private func animates(_ animations: @escaping VoidCompletion, completion: VoidCompletion? = nil) {
         UIView.animate(withDuration: 0.15, delay: 0, options: UIViewAnimationOptions(rawValue: 7 << 16), animations: {
             animations()
@@ -109,7 +107,13 @@ final class ServersListView: UIView {
     // MARK: Server Management
 
     @IBAction func buttonAddNewServerDidPressed(sender: Any) {
-        presentAddServer?()
+        WindowManager.open(
+            .auth(
+                serverUrl: "",
+                credentials: nil
+            ),
+            viewControllerIdentifier: viewModel.connectServerNavIdentifier
+        )
     }
 
     func selectServer(at indexPath: IndexPath) {
@@ -203,6 +207,25 @@ extension ServersListView: UITableViewDelegate {
 // MARK: Themeable
 
 extension ServersListView {
+    override var theme: Theme? {
+        guard let theme = super.theme else { return nil }
+        return Theme(
+            backgroundColor: theme == .light ? theme.backgroundColor : theme.focusedBackground,
+            focusedBackground: theme.focusedBackground,
+            auxiliaryBackground: theme.auxiliaryBackground,
+            titleText: theme.titleText,
+            bodyText: theme.bodyText,
+            controlText: theme.controlText,
+            auxiliaryText: theme.auxiliaryText,
+            tintColor: theme.tintColor,
+            auxiliaryTintColor: theme.auxiliaryTintColor,
+            hyperlink: theme.hyperlink,
+            mutedAccent: theme.mutedAccent,
+            strongAccent: theme.strongAccent,
+            appearence: theme.appearence
+        )
+    }
+
     override func applyTheme() {
         super.applyTheme()
         guard let theme = theme else { return }

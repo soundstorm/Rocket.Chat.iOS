@@ -56,7 +56,6 @@ final class ReactorListView: UIView {
     }
 
     var isPopover = false
-    var closePressed: () -> Void = { }
     var selectedReactor: (String, CGRect) -> Void = { _, _ in }
     var configureCell: (ReactorCell) -> Void = { _ in }
 
@@ -82,10 +81,6 @@ final class ReactorListView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         commonInit()
-    }
-
-    @IBAction func closePressed(_ sender: UIBarButtonItem) {
-        closePressed()
     }
 }
 
@@ -168,14 +163,15 @@ extension ReactorListView {
         guard isPopover else { return theme }
         let popoverTheme = Theme(
             backgroundColor: theme.focusedBackground,
+            focusedBackground: theme.focusedBackground,
+            auxiliaryBackground: theme.auxiliaryBackground,
             titleText: theme.titleText,
             bodyText: theme.bodyText,
             controlText: theme.controlText,
             auxiliaryText: theme.auxiliaryText,
             tintColor: theme.tintColor,
-            hyperlinkColor: theme.hyperlinkColor,
-            focusedBackground: theme.focusedBackground,
-            auxiliaryBackground: theme.auxiliaryBackground,
+            auxiliaryTintColor: theme.auxiliaryTintColor,
+            hyperlink: theme.hyperlink,
             mutedAccent: theme.mutedAccent,
             strongAccent: theme.strongAccent,
             appearence: theme.appearence

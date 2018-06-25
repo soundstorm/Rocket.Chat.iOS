@@ -92,7 +92,7 @@
 "connection.server.redirect.alert.confirm" = "Yes, change the URL";
 
 // Socket Connection
-"connection.title" = "Sign in your server";
+"connection.title" = "Sign in to your server";
 "connection.button_connect" = "Connect";
 "connection.offline.banner.message" = "You're offline, try connecting again";
 "connection.connecting.banner.message" = "Connecting...";
@@ -101,9 +101,9 @@
 // Onboarding
 "onboarding.label_welcome" = "Welcome to Rocket Chat";
 "onboarding.label_subtitle" = "Open Source Communication";
-"onboarding.button_connect_server" = "Connect with a server";
-"onboarding.button_create_server" = "Create a new server";
-"onboarding.button_join_community_prefix" = "Join in the community";
+"onboarding.button_connect_server" = "Connect to a server";
+"onboarding.button_create_server" = "Create a new workspace";
+"onboarding.button_join_community_prefix" = "Join the community";
 
 // Auth
 "auth.connect.button_connect" = "Connect";
@@ -157,7 +157,7 @@
 "servers.add_new_server" = "Add Server";
 "servers.action.disconnect" = "Disconnect";
 "servers.action.disconnect.alert.title" = "Disconnect from Server";
-"servers.action.disconnect.alert.message" = "Are you want to disconnect from \"%@\" server?";
+"servers.action.disconnect.alert.message" = "Do you want to disconnect from \"%@\" server?";
 "servers.action.disconnect.alert.confirm" = "Yes, disconnect";
 
 // Status
@@ -193,7 +193,13 @@
 "chat.loading_messages" = "Loading messages...";
 "chat.unread_separator" = "new messages";
 
+// Read Receipts
+"chat.read_receipt_list.title" = "Read by";
+"chat.read_receipt_list.title.loading" = "Loading...";
+"chat.read_receipt_list.title.empty" = "Read by no one";
+
 // Chat Message Actions
+"chat.message.actions.info" = "Message info";
 "chat.message.actions.react" = "Add Reaction";
 "chat.message.actions.block" = "Block messages from user";
 "chat.message.actions.report" = "Report Message";
@@ -275,6 +281,7 @@
 "chat.info.item.starred" = "Starred";
 "chat.info.item.mentions" = "Mentions";
 "chat.info.item.files" = "Files";
+"chat.info.item.share" = "Share";
 
 // Members List
 "chat.members.list.title" = "Members";
