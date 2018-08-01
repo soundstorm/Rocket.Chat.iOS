@@ -8,6 +8,7 @@
 
 import UIKit
 import FLAnimatedImage
+import Nuke
 
 final class AvatarView: UIView {
 
@@ -18,7 +19,7 @@ final class AvatarView: UIView {
                 ImageManager.loadImage(with: imageURL, into: imageView) { [weak self] _, error in
                     guard error == nil else { return }
 
-                    self?.labelInitials.text = ""
+                    self?.labelInitials.text = nil
                     self?.backgroundColor = UIColor.clear
                 }
             }
@@ -27,19 +28,25 @@ final class AvatarView: UIView {
 
     var avatarURL: URL? {
         didSet {
-            updateAvatar()
+            if avatarURL != nil {
+                updateAvatar()
+            }
         }
     }
 
     var subscription: Subscription? {
         didSet {
-            updateAvatar()
+            if subscription != nil {
+                updateAvatar()
+            }
         }
     }
 
     var user: User? {
         didSet {
-            updateAvatar()
+            if user != nil {
+                updateAvatar()
+            }
         }
     }
 
@@ -72,7 +79,7 @@ final class AvatarView: UIView {
             backgroundColor = .clear
         } else if let avatarURL = avatarURL {
             imageURL = avatarURL
-        } else if let user = user {
+        } else if let user = user?.validated() {
             setAvatarWithInitials(forUsername: user.username)
 
             if let avatarURL = user.avatarURL() {
@@ -145,6 +152,21 @@ final class AvatarView: UIView {
         backgroundColor = color
     }
 
+    func refreshCurrentAvatar(withCachedData data: Data, completion: (() -> Void)? = nil) {
+        guard let url = imageURL else {
+            return
+        }
+
+        ImageManager.dataCache?.storeData(data, for: url.absoluteString)
+        ImageManager.memoryCache.removeResponse(
+            for: ImageRequest(
+                url: url
+            )
+        )
+
+        completion?()
+    }
+
     func prepareForReuse() {
         avatarPlaceholder = nil
         avatarURL = nil
@@ -155,7 +177,6 @@ final class AvatarView: UIView {
 
         imageView.image = nil
         imageView.animatedImage = nil
-
         labelInitials.text = ""
     }
 

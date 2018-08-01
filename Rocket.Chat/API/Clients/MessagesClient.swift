@@ -12,14 +12,31 @@ import SwiftyJSON
 struct MessagesClient: APIClient {
     let api: AnyAPIFetcher
 
+    // swiftlint:disable function_body_length
     func sendMessage(_ message: Message, subscription: Subscription, realm: Realm? = Realm.current) {
         guard let id = message.identifier else { return }
+        let subscriptionIdentifier = subscription.rid
 
         try? realm?.write {
+            if let subscriptionMutable = Subscription.find(rid: subscriptionIdentifier, realm: realm) {
+                subscriptionMutable.roomLastMessage = message
+                subscriptionMutable.roomLastMessageDate = message.createdAt
+                subscriptionMutable.roomLastMessageText = Subscription.lastMessageText(lastMessage: message)
+                realm?.add(subscriptionMutable, update: true)
+            }
+
             realm?.add(message, update: true)
         }
 
         func updateMessage(json: JSON) {
+            if message.validated() == nil {
+                return
+            }
+
+            let server = AuthManager.selectedServerHost()
+
+            AnalyticsManager.log(event: .messageSent(subscriptionType: subscription.type.rawValue, server: server))
+
             try? realm?.write {
                 message.temporary = false
                 message.failed = false
@@ -33,6 +50,10 @@ struct MessagesClient: APIClient {
 
         func setMessageOffline() {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                if message.validated() == nil {
+                    return
+                }
+
                 try? realm?.write {
                     message.temporary = false
                     message.failed = true
@@ -59,7 +80,9 @@ struct MessagesClient: APIClient {
                 switch error {
                 case .version:
                     SubscriptionManager.sendTextMessage(message, completion: { response in
-                        updateMessage(json: response.result["result"])
+                        DispatchQueue.main.async {
+                            updateMessage(json: response.result["result"])
+                        }
                     })
                 default:
                     setMessageOffline()
@@ -68,6 +91,8 @@ struct MessagesClient: APIClient {
 
         }
     }
+
+    // swiftlint:enable function_body_length
 
     func sendMessage(text: String, subscription: Subscription, id: String = String.random(18), user: User? = AuthManager.currentUser(), realm: Realm? = Realm.current) {
         let message = Message()
@@ -167,6 +192,7 @@ struct MessagesClient: APIClient {
         return true
     }
 
+    // swiftlint:disable function_body_length
     @discardableResult
     func reactMessage(_ message: Message, emoji: String, user: User? = AuthManager.currentUser(), realm: Realm? = Realm.current) -> Bool {
         guard let id = message.identifier, let username = user?.username else {
@@ -211,12 +237,25 @@ struct MessagesClient: APIClient {
 
         api.fetch(ReactMessageRequest(msgId: id, emoji: emoji)) { response in
             switch response {
-            case .resource: break
+            case .resource:
+                AnalyticsManager.log(
+                    event: .reaction(
+                        subscriptionType: message.subscription?.type.rawValue ?? ""
+                    )
+                )
             case .error(let error):
                 switch error {
                 case .version:
                     // version fallback
-                    MessageManager.react(message, emoji: emoji, completion: { _ in })
+                    MessageManager.react(message, emoji: emoji, completion: { _ in
+                        DispatchQueue.main.async {
+                            AnalyticsManager.log(
+                                event: .reaction(
+                                    subscriptionType: message.subscription?.type.rawValue ?? ""
+                                )
+                            )
+                        }
+                    })
                 default:
                     Alert.defaultError.present()
                 }
@@ -225,4 +264,6 @@ struct MessagesClient: APIClient {
 
         return true
     }
+
+    // swiftlint:enable function_body_length
 }

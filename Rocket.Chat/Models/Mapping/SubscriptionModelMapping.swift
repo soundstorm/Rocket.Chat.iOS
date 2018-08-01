@@ -10,15 +10,27 @@ import Foundation
 import SwiftyJSON
 import RealmSwift
 
+// swiftlint:disable cyclomatic_complexity
 extension Subscription: ModelMappeable {
     func map(_ values: JSON, realm: Realm?) {
         if self.identifier == nil {
             self.identifier = values["_id"].stringValue
         }
 
-        self.rid = values["rid"].stringValue
+        if let rid = values["rid"].string {
+            self.rid = rid
+        }
+
         self.name = values["name"].stringValue
-        self.fname = values["fname"].stringValue
+
+        if let fname = values["fname"].string {
+            self.fname = fname
+        } else {
+            if self.fname.isEmpty {
+                self.fname = self.name
+            }
+        }
+
         self.unread = values["unread"].int ?? 0
         self.userMentions = values["userMentions"].int ?? 0
         self.groupMentions = values["groupMentions"].int ?? 0
@@ -48,6 +60,36 @@ extension Subscription: ModelMappeable {
 
         if let lastSeen = values["ls"]["$date"].double {
             self.lastSeen = Date.dateFromInterval(lastSeen)
+        }
+
+        mapNotifications(values)
+    }
+
+    func mapNotifications(_ values: JSON) {
+        self.disableNotifications = values["disableNotifications"].bool ?? false
+        self.hideUnreadStatus = values["hideUnreadStatus"].bool ?? false
+        if let desktopNotificationsString = values["desktopNotifications"].string {
+            self.desktopNotifications = SubscriptionNotificationsStatus(rawValue: desktopNotificationsString) ?? .default
+        }
+
+        if let audioNotificationsString = values["audioNotifications"].string {
+            self.audioNotifications = SubscriptionNotificationsStatus(rawValue: audioNotificationsString) ?? .default
+        }
+
+        if let mobilePushNotificationsString = values["mobilePushNotifications"].string {
+            self.mobilePushNotifications = SubscriptionNotificationsStatus(rawValue: mobilePushNotificationsString) ?? .default
+        }
+
+        if let emailNotificationsString = values["emailNotifications"].string {
+            self.emailNotifications = SubscriptionNotificationsStatus(rawValue: emailNotificationsString) ?? .default
+        }
+
+        if let audioNotificationValueString = values["audioNotificationValue"].string {
+            self.audioNotificationValue = SubscriptionNotificationsAudioValue(rawValue: audioNotificationValueString) ?? .default
+        }
+
+        if let duration = values["desktopNotificationDuration"].int {
+            self.desktopNotificationDuration = duration
         }
     }
 

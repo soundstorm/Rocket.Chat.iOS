@@ -8,13 +8,7 @@
 
 import UIKit
 
-protocol SubscriptionsTitleViewDelegate: class {
-    func userDidPressServerName()
-}
-
 final class SubscriptionsTitleView: UIView {
-
-    weak var delegate: SubscriptionsTitleViewDelegate?
 
     var state: SocketConnectionState = SocketManager.sharedInstance.state {
         didSet {
@@ -37,10 +31,6 @@ final class SubscriptionsTitleView: UIView {
             buttonServer.layer.cornerRadius = 5
             buttonServer.layer.masksToBounds = true
         }
-    }
-
-    @IBAction func buttonServerDidPressed(sender: Any) {
-        delegate?.userDidPressServerName()
     }
 
     func updateServerName(name: String?) {
@@ -92,7 +82,16 @@ extension SubscriptionsTitleView {
     override func applyTheme() {
         super.applyTheme()
         guard let theme = theme else { return }
-        buttonServer.setTitleColor(theme.tintColor, for: .normal)
+
         buttonServer.tintColor = theme.tintColor
+        buttonServer.setTitleColor(theme.tintColor, for: .normal)
+
+        if #available(iOS 11, *) {
+            // Do nothing
+        } else {
+            if let buttonLabel = buttonServer.subviews.first(where: { $0 is UILabel }) as? UILabel {
+                buttonLabel.textColor = theme.tintColor
+            }
+        }
     }
 }

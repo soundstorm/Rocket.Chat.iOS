@@ -31,42 +31,70 @@ final class RegisterUsernameTableViewController: BaseTableViewController {
             navigationItem.title = SocketManager.sharedInstance.serverURL?.host
         }
 
-        if let nav = navigationController as? BaseNavigationController {
+        if let nav = navigationController as? AuthNavigationController {
             nav.setGrayTheme()
         }
+
+        setupAuth()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
-        if SocketManager.isConnected() {
-            startLoading()
-            AuthManager.usernameSuggestion { [weak self] (response) in
-                self?.stopLoading()
-
-                if !response.isError() {
-                    self?.textFieldUsername.text = response.result["result"].stringValue
-                }
-            }
-        }
-
         textFieldUsername.becomeFirstResponder()
     }
 
     func startLoading() {
-        textFieldUsername.alpha = 0.5
-        requesting = true
-        registerButton.startLoading()
-        textFieldUsername.resignFirstResponder()
+        DispatchQueue.main.async {
+            self.textFieldUsername.alpha = 0.5
+            self.requesting = true
+            self.view.layoutIfNeeded()
+            self.registerButton.startLoading()
+            self.textFieldUsername.resignFirstResponder()
+        }
     }
 
     func stopLoading() {
-        textFieldUsername.alpha = 1
-        requesting = false
-        registerButton.stopLoading()
+        DispatchQueue.main.async {
+            self.textFieldUsername.alpha = 1
+            self.requesting = false
+            self.registerButton.stopLoading()
+        }
     }
 
     // MARK: Request username
+
+    func setupAuth() {
+        let presentGenericSocketError = {
+            Alert(
+                title: localized("error.socket.default_error.title"),
+                message: localized("error.socket.default_error.message")
+            ).present()
+        }
+        guard let auth = AuthManager.isAuthenticated() else {
+            presentGenericSocketError()
+            return
+        }
+
+        startLoading()
+        AuthManager.resume(auth) { [weak self] response in
+            self?.stopLoading()
+
+            if response.isError() {
+                presentGenericSocketError()
+            } else {
+                self?.startLoading()
+                AuthManager.usernameSuggestion { (response) in
+                    self?.stopLoading()
+
+                    if !response.isError() {
+                        DispatchQueue.main.async {
+                            self?.textFieldUsername.text = response.result["result"].stringValue
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     @IBAction func didPressedRegisterButton() {
         guard !requesting else {

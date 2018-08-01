@@ -363,7 +363,7 @@ final class EditProfileTableViewController: BaseTableViewController, MediaPicker
         isUploadingAvatar = true
 
         let client = API.current()?.client(UploadClient.self)
-        client?.uploadAvatar(data: avatarFile.data, filename: avatarFile.name, mimetype: avatarFile.type, completion: { [weak self] in
+        client?.uploadAvatar(data: avatarFile.data, filename: avatarFile.name, mimetype: avatarFile.type, completion: { [weak self] _ in
             guard let strongSelf = self else { return }
 
             if !strongSelf.isUpdatingUser {
@@ -372,7 +372,9 @@ final class EditProfileTableViewController: BaseTableViewController, MediaPicker
 
             strongSelf.isUploadingAvatar = false
             strongSelf.avatarView.avatarPlaceholder = UIImage(data: avatarFile.data)
-            strongSelf.stopLoading()
+            strongSelf.avatarView.refreshCurrentAvatar(withCachedData: avatarFile.data, completion: {
+                strongSelf.stopLoading()
+            })
             strongSelf.avatarFile = nil
         })
     }
@@ -526,10 +528,8 @@ extension EditProfileTableViewController: UIImagePickerControllerDelegate {
         var file: FileUpload?
 
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            guard let imageData = UIImageJPEGRepresentation(image, 0.1) else { return }
-
             file = UploadHelper.file(
-                for: imageData,
+                for: image.compressedForUpload,
                 name: "\(filename.components(separatedBy: ".").first ?? "image").jpeg",
                 mimeType: "image/jpeg"
             )

@@ -87,6 +87,7 @@ final class ServersListView: UIView {
             })
         }
 
+        instance.applyTheme()
         return instance
     }
 
@@ -120,13 +121,6 @@ final class ServersListView: UIView {
         if indexPath.row == DatabaseManager.selectedIndex {
             close()
         } else {
-            DatabaseManager.selectDatabase(at: indexPath.row)
-            DatabaseManager.changeDatabaseInstance(index: indexPath.row)
-
-            SocketManager.disconnect { (_, _) in
-                WindowManager.open(.subscriptions)
-            }
-
             AppManager.changeSelectedServer(index: indexPath.row)
         }
     }
@@ -141,6 +135,11 @@ final class ServersListView: UIView {
 
         alert.actions.append(UIAlertAction(title: localized("servers.action.disconnect.alert.confirm"), style: .destructive, handler: { _ in
             API.server(index: indexPath.row)?.client(PushClient.self).deletePushToken()
+
+            if indexPath.row < DatabaseManager.selectedIndex {
+                DatabaseManager.selectDatabase(at: DatabaseManager.selectedIndex - 1)
+            }
+
             DatabaseManager.removeDatabase(at: indexPath.row)
 
             self.viewModel.updateServersList()
@@ -210,9 +209,10 @@ extension ServersListView {
     override var theme: Theme? {
         guard let theme = super.theme else { return nil }
         return Theme(
-            backgroundColor: theme == .light ? theme.backgroundColor : theme.focusedBackground,
+            backgroundColor: theme.appearence == .light ? theme.backgroundColor : theme.focusedBackground,
             focusedBackground: theme.focusedBackground,
             auxiliaryBackground: theme.auxiliaryBackground,
+            bannerBackground: theme.bannerBackground,
             titleText: theme.titleText,
             bodyText: theme.bodyText,
             controlText: theme.controlText,

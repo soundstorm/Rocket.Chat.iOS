@@ -14,6 +14,9 @@ def ui_pods
 end
 
 def shared_pods
+  # Analytics
+  pod 'Firebase/Core'
+
   # Crash Report
   pod 'Fabric'
   pod 'Crashlytics'
@@ -34,6 +37,7 @@ def shared_pods
   database_pods
 
   # Network
+  pod 'Nuke', '~> 7.3'
   pod 'Nuke-FLAnimatedImage-Plugin'
   pod 'Starscream', '~> 2'
   pod 'ReachabilitySwift'
@@ -43,7 +47,6 @@ def shared_pods
   pod '1PasswordExtension'
 
   # Debugging
-  pod 'Instabug', :configurations => ['Debug', 'Beta']
   pod 'SwiftLint', :configurations => ['Debug']
   pod 'FLEX', '~> 2.0', :configurations => ['Debug', 'Beta']
 end

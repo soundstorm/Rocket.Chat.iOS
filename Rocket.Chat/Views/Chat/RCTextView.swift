@@ -150,24 +150,33 @@ class HighlightLayoutManager: NSLayoutManager {
 
 extension RCTextView: UITextViewDelegate {
 
-    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        if interaction != .invokeDefaultAction {
+            return false
+        }
+
         if URL.scheme == "http" || URL.scheme == "https" {
             delegate?.openURL(url: URL)
             return false
         }
 
         if let deepLink = DeepLink(url: URL) {
-            guard
-                case let .mention(name) = deepLink,
-                let user = User.find(username: name),
-                let start = textView.position(from: textView.beginningOfDocument, offset: characterRange.location),
-                let end = textView.position(from: start, offset: characterRange.length),
-                let range = textView.textRange(from: start, to: end)
-            else {
-                return false
-            }
+            switch deepLink {
+            case let .mention(name):
+                guard
+                    let user = User.find(username: name),
+                    let start = textView.position(from: textView.beginningOfDocument, offset: characterRange.location),
+                    let end = textView.position(from: start, offset: characterRange.length),
+                    let range = textView.textRange(from: start, to: end)
+                else {
+                    return false
+                }
 
-            MainSplitViewController.chatViewController?.presentActionSheetForUser(user, source: (textView, textView.firstRect(for: range)))
+                MainSplitViewController.chatViewController?.presentActionSheetForUser(user, source: (textView, textView.firstRect(for: range)))
+                return false
+            default:
+                return UIApplication.shared.canOpenURL(URL)
+            }
         }
 
         return false

@@ -13,7 +13,7 @@ class WelcomeViewController: BaseViewController {
 
     internal var joinCommunitySegue = "JoinCommunity"
     internal let communityServerURL = "\nopen.rocket.chat"
-    internal let createServerURL = "https://cloud.rocket.chat"
+    internal let createServerURL = "https://cloud.rocket.chat/trial"
 
     @IBOutlet weak var welcomeLabel: UILabel! {
         didSet {
@@ -83,6 +83,10 @@ class WelcomeViewController: BaseViewController {
 
     // MARK: Life Cycle
 
+    override var isNavigationBarTransparent: Bool {
+        return true
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupAppearance()
@@ -91,7 +95,7 @@ class WelcomeViewController: BaseViewController {
     // MARK: Setup
 
     func setupAppearance() {
-        if let nav = navigationController as? BaseNavigationController {
+        if let nav = navigationController as? AuthNavigationController {
             nav.setTransparentTheme()
         }
 
@@ -119,7 +123,7 @@ class WelcomeViewController: BaseViewController {
         }
 
         let controller = SFSafariViewController(url: url)
-        controller.modalPresentationStyle = .popover
+        controller.modalPresentationStyle = .formSheet
         controller.preferredControlTintColor = view.tintColor
 
         present(controller, animated: true, completion: nil)

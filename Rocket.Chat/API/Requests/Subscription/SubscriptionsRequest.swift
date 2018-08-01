@@ -16,9 +16,14 @@ struct SubscriptionsRequest: APIRequest {
 
     var query: String? {
         if let updatedSince = updatedSince {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-            return "updatedSince=\(dateFormatter.string(from: updatedSince))"
+            let dateFormatter = ISO8601DateFormatter()
+            let dateString = dateFormatter.string(from: updatedSince)
+
+            if let encodedString = dateString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                return "updatedSince=\(encodedString)"
+            }
+
+            return ""
         }
 
         return nil
@@ -32,28 +37,27 @@ struct SubscriptionsRequest: APIRequest {
 }
 
 final class SubscriptionsResource: APIResource {
-    var update: [Subscription]? {
-        guard let realm = Realm.current else { return [] }
-        return raw?["update"].array?.map {
-            return Subscription.getOrCreate(realm: realm, values: $0, updates: nil)
-        }.compactMap { $0 }
+    var update: [JSON]? {
+        return raw?["update"].array
     }
 
-    var remove: [Subscription]? {
-        guard let realm = Realm.current else { return [] }
-        return raw?["remove"].array?.map {
-            return Subscription.getOrCreate(realm: realm, values: $0, updates: nil)
-        }.compactMap { $0 }
+    var remove: [JSON]? {
+        return raw?["remove"].array
     }
 
-    var list: [Subscription]? {
-        guard let realm = Realm.current else { return [] }
-        return raw?["result"].array?.map {
-            return Subscription.getOrCreate(realm: realm, values: $0, updates: nil)
-        }.compactMap { $0 }
+    var list: [JSON]? {
+        return raw?["result"].array
     }
 
     var success: Bool? {
         return raw?["success"].bool
+    }
+
+    var subscriptions: [Subscription]? {
+        return update?.compactMap {
+            let subscription = Subscription()
+            subscription.map($0, realm: nil)
+            return subscription
+        }
     }
 }

@@ -21,6 +21,7 @@ struct ChatData {
     var type: ChatDataType = .message
     var timestamp: Date
     var indexPath: IndexPath!
+    var height: CGFloat?
 
     // This is only used for messages
     var message: Message?
@@ -34,6 +35,8 @@ struct ChatData {
 
 final class ChatDataController {
     var messagesUsernames: Set<String> = []
+
+    var dataCellHeight: [String: CGFloat] = [:]
     var data: [ChatData] = [] {
         didSet {
             messagesUsernames.removeAll()
@@ -58,6 +61,18 @@ final class ChatDataController {
 
         data = []
         return indexPaths
+    }
+
+    func cacheCellHeight(for identifier: String, value: CGFloat) {
+        dataCellHeight[identifier] = value
+    }
+
+    func invalidateLayout(for identifier: String?) {
+        if let identifier = identifier {
+            dataCellHeight.removeValue(forKey: identifier)
+        } else {
+            dataCellHeight = [:]
+        }
     }
 
     func itemAt(_ indexPath: IndexPath) -> ChatData? {
@@ -294,6 +309,8 @@ final class ChatDataController {
     func update(_ message: Message) -> Int {
         for (idx, obj) in data.enumerated()
             where obj.message?.identifier == message.identifier {
+                invalidateLayout(for: obj.identifier)
+
                 if obj.message?.updatedAt?.timeIntervalSince1970 == message.updatedAt?.timeIntervalSince1970 {
                    return -1
                 }

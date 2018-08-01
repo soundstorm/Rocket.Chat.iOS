@@ -32,7 +32,7 @@ final class SubscriptionsSortingView: UIView {
     }
 
     @IBOutlet weak var separatorView: UIView!
-    @IBOutlet weak var buttonClose: UIButton!
+    @IBOutlet weak var filterImageView: UIImageView!
     @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var tableView: UITableView! {
         didSet {
@@ -87,6 +87,7 @@ final class SubscriptionsSortingView: UIView {
             })
         }
 
+        instance.applyTheme()
         return instance
     }
 
@@ -105,7 +106,7 @@ final class SubscriptionsSortingView: UIView {
 
     // MARK: IBAction
 
-    @IBAction func buttonCloseDidPressed(_ sender: Any) {
+    @IBAction func recognizeHeaderTapGesture(_ sender: UITapGestureRecognizer) {
         close()
     }
 
@@ -197,9 +198,10 @@ extension SubscriptionsSortingView {
     override var theme: Theme? {
         guard let theme = super.theme else { return nil }
         return Theme(
-            backgroundColor: theme == .light ? theme.backgroundColor : theme.focusedBackground,
+            backgroundColor: theme.appearence == .light ? theme.backgroundColor : theme.focusedBackground,
             focusedBackground: theme.focusedBackground,
             auxiliaryBackground: theme.auxiliaryBackground,
+            bannerBackground: theme.bannerBackground,
             titleText: theme.titleText,
             bodyText: theme.bodyText,
             controlText: theme.controlText,
@@ -218,7 +220,7 @@ extension SubscriptionsSortingView {
         guard let theme = theme else { return }
 
         labelTitle.textColor = theme.auxiliaryText
-        buttonClose.tintColor = theme.auxiliaryText
+        filterImageView.tintColor = theme.auxiliaryText
         separatorView.backgroundColor = theme.mutedAccent
     }
 }

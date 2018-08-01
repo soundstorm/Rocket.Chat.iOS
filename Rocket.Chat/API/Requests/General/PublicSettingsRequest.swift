@@ -27,6 +27,7 @@ final class PublicSettingsRequest: APIRequest {
                 "UI_Use_Real_Name",
                 "UI_Allow_room_names_with_special_chars",
                 "Favorite_Rooms",
+                "Store_Last_Message",
                 "Accounts_OAuth_Google",
                 "Accounts_OAuth_Facebook",
                 "Accounts_OAuth_Github",
@@ -37,6 +38,7 @@ final class PublicSettingsRequest: APIRequest {
                 "CAS_enabled",
                 "CAS_login_url",
                 "API_Gitlab_URL",
+                "API_Wordpress_URL",
                 "Accounts_ShowFormLogin",
                 "Accounts_RegistrationForm",
                 "Accounts_PasswordReset",
@@ -49,6 +51,7 @@ final class PublicSettingsRequest: APIRequest {
                 "Accounts_AllowUsernameChange",
                 "Accounts_AllowEmailChange",
                 "Accounts_AllowPasswordChange",
+                "Accounts_OAuth_Wordpress_server_type",
                 "FileUpload_Storage_Type",
                 "Message_HideType_uj",
                 "Message_HideType_ul",
@@ -68,7 +71,8 @@ final class PublicSettingsRequest: APIRequest {
                 "Message_Read_Receipt_Enabled",
                 "Message_Read_Receipt_Store_Users",
                 "Accounts_CustomFields",
-                "First_Channel_After_Login"
+                "First_Channel_After_Login",
+                "FileUpload_MaxFileSize"
             ]
         }
     }

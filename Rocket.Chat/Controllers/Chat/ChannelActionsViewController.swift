@@ -12,9 +12,12 @@ private typealias ListSegueData = (title: String, query: String?, isListingMenti
 
 class ChannelActionsViewController: BaseViewController {
 
+    internal let kShareRoomSection = 2
+
     @IBOutlet weak var tableView: UITableView!
 
     weak var buttonFavorite: UIBarButtonItem?
+    weak var shareRoomCell: UITableViewCell!
 
     var tableViewData: [[Any?]] = [] {
         didSet {
@@ -26,7 +29,7 @@ class ChannelActionsViewController: BaseViewController {
         didSet {
             guard let subscription = self.subscription else { return }
 
-            let shouldListMentions = subscription.type != .directMessage
+            let isDirectMessage = subscription.type == .directMessage
 
             var header: [Any?]? = nil
 
@@ -55,10 +58,11 @@ class ChannelActionsViewController: BaseViewController {
 
             let data = [header, [
                 ChannelInfoActionCellData(icon: UIImage(named: "Attachments"), title: title(for: "files"), action: showFilesList),
-                shouldListMentions ? ChannelInfoActionCellData(icon: UIImage(named: "Mentions"), title: title(for: "mentions"), action: showMentionsList) : nil,
-                ChannelInfoActionCellData(icon: UIImage(named: "Members"), title: title(for: "members"), action: showMembersList),
-                ChannelInfoActionCellData(icon: UIImage(named: "Star Off"), title: title(for: "starred"), action: showStarredList),
-                ChannelInfoActionCellData(icon: UIImage(named: "Pinned"), title: title(for: "pinned"), action: showPinnedList)
+                isDirectMessage ? nil : ChannelInfoActionCellData(icon: UIImage(named: "Mentions"), title: title(for: "mentions"), action: showMentionsList),
+                isDirectMessage ? nil : ChannelInfoActionCellData(icon: UIImage(named: "Members"), title: title(for: "members"), action: showMembersList),
+                ChannelInfoActionCellData(icon: UIImage(named: "Star"), title: title(for: "starred"), action: showStarredList),
+                ChannelInfoActionCellData(icon: UIImage(named: "Pinned"), title: title(for: "pinned"), action: showPinnedList),
+                ChannelInfoActionCellData(icon: UIImage(named: "Notifications"), title: title(for: "notifications"), action: showNotificationsSettings)
             ], [
                 ChannelInfoActionCellData(icon: UIImage(named: "Share"), title: title(for: "share"), detail: false, action: shareRoom)
             ]]
@@ -141,11 +145,13 @@ extension ChannelActionsViewController {
         guard let subscription = self.subscription else { return }
 
         SubscriptionManager.toggleFavorite(subscription) { [unowned self] (response) in
-            if response.isError() {
-                subscription.updateFavorite(!subscription.favorite)
-            }
+            DispatchQueue.main.async {
+                if response.isError() {
+                    subscription.updateFavorite(!subscription.favorite)
+                }
 
-            self.updateButtonFavoriteImage()
+                self.updateButtonFavoriteImage()
+            }
         }
 
         self.subscription?.updateFavorite(!subscription.favorite)
@@ -157,6 +163,11 @@ extension ChannelActionsViewController {
 // MARK: Actions
 
 extension ChannelActionsViewController {
+
+    func showUserDetails(_ user: User) {
+        let controller = UserDetailViewController.fromStoryboard().withModel(.forUser(user))
+        navigationController?.pushViewController(controller, animated: true)
+    }
 
     func showMembersList() {
         self.performSegue(withIdentifier: "toMembersList", sender: self)
@@ -170,6 +181,10 @@ extension ChannelActionsViewController {
         )
 
         self.performSegue(withIdentifier: "toMessagesList", sender: data)
+    }
+
+    private func showNotificationsSettings() {
+        self.performSegue(withIdentifier: "toNotificationsSettings", sender: self)
     }
 
     func showStarredList() {
@@ -210,6 +225,13 @@ extension ChannelActionsViewController {
     func shareRoom() {
         guard let url = subscription?.externalURL() else { return }
         let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+
+        if shareRoomCell != nil && UIDevice.current.userInterfaceIdiom == .pad {
+            controller.modalPresentationStyle = .popover
+            controller.popoverPresentationController?.sourceView = shareRoomCell
+            controller.popoverPresentationController?.sourceRect = shareRoomCell.bounds
+        }
+
         present(controller, animated: true, completion: nil)
     }
 
@@ -234,6 +256,10 @@ extension ChannelActionsViewController {
             if let segueData = sender as? ListSegueData {
                 filesList.data.title = segueData.title
             }
+        }
+
+        if let notificationsSettings = segue.destination as? NotificationsPreferencesViewController {
+            notificationsSettings.subscription = subscription
         }
     }
 
@@ -282,28 +308,36 @@ extension ChannelActionsViewController: UITableViewDelegate {
         let data = tableViewData[indexPath.section][indexPath.row]
 
         if data as? ChannelInfoActionCellData != nil {
-            return CGFloat(ChannelInfoActionCell.defaultHeight)
+            return ChannelInfoActionCell.defaultHeight
         }
 
         if data as? ChannelInfoUserCellData != nil {
-            return CGFloat(ChannelInfoUserCell.defaultHeight)
+            return ChannelInfoUserCell.defaultHeight
         }
 
         if data as? ChannelInfoDescriptionCellData != nil {
-            return CGFloat(ChannelInfoDescriptionCell.defaultHeight)
+            return ChannelInfoDescriptionCell.defaultHeight
         }
 
         if data as? ChannelInfoBasicCellData != nil {
-            return CGFloat(ChannelInfoBasicCell.defaultHeight)
+            return ChannelInfoBasicCell.defaultHeight
         }
 
-        return CGFloat(0)
+        return 0
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
+        if indexPath.section == kShareRoomSection && UIDevice.current.userInterfaceIdiom == .pad {
+            shareRoomCell = tableView.cellForRow(at: indexPath)
+        }
+
         let data = tableViewData[indexPath.section][indexPath.row]
+
+        if let data = data as? ChannelInfoUserCellData, let user = data.user {
+            showUserDetails(user)
+        }
 
         if let data = data as? ChannelInfoActionCellData {
             guard let action = data.action else {
