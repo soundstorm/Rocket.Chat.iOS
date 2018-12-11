@@ -55,7 +55,16 @@ extension UIView: ThemeProvider {
      */
 
     var theme: Theme? {
-        guard type(of: self).description() != "_UIAlertControllerView" else { return nil }
+        let exemptedInternalViews = [
+            "UISwipeActionStandardButton",
+            "_UIAlertControllerView"
+        ]
+
+        let exemptedExternalViews = [
+            "SwipeCellKit.SwipeActionsView"
+        ]
+
+        guard !(exemptedInternalViews + exemptedExternalViews).contains(type(of: self).description()) else { return nil }
         guard let superview = superview else { return ThemeManager.theme }
         if type(of: self).description() == "_UIPopoverView" { return themeForPopover }
         return superview.theme
@@ -137,16 +146,18 @@ extension UITextField {
     }
 }
 
+// Due to a possible bug in iOS, search bars with .minimal
+// style are not able to be themed. Use .prominent or .default
+// searchBarStyle instead.
 extension UISearchBar {
     override func applyTheme() {
         super.applyTheme()
-
+        guard let theme = theme else { return }
         if #available(iOS 11, *) {
-            // Do nothing
-        } else {
-            backgroundImage = UIImage()
+            barStyle = theme.appearence.barStyle
         }
 
+        backgroundImage = UIImage()
         textField?.backgroundColor = #colorLiteral(red: 0.4980838895, green: 0.4951269031, blue: 0.5003594756, alpha: 0.1525235445)
         applyThemeFromRuntimeAttributes()
     }
